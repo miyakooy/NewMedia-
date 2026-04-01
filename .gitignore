@@ -1,0 +1,29 @@
+# 配置文件
+config.py
+.env
+*.pyc
+__pycache__/
+.pytest_cache/
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/
+
+# 输出目录
+output/
+temp/
+*.log
+
+# 媒体文件
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.mov
+*.avi
+
+# OS files
+.DS_Store
+Thumbs.db
