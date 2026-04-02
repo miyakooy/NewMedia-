@@ -1,8 +1,8 @@
 requests>=2.31.0
 click>=8.1.7
 python-dotenv>=1.0.0
-feishu-api>=0.2.0
-craw4ai>=0.3.0
+lark-oapi
+crawl4ai>=0.3.0
 Pillow>=10.1.0
 moviepy>=1.0.3
 Jinja2>=3.1.2
