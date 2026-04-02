@@ -1,6 +1,7 @@
 import click
 import os
 import sys
+import json
 
 # 加载配置
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -14,6 +15,7 @@ from src.xhs import xhs_cli
 from src.blog import blog_cli
 from src.ppt import ppt_cli
 from src.video import video_cli
+from src.seo import KeywordResearch, ContentAuditor, GeoOptimizer, HotspotCrawler
 
 @click.group()
 @click.version_option(version="0.1.0")
@@ -26,6 +28,90 @@ cli.add_command(xhs_cli, name="xhs")
 cli.add_command(blog_cli, name="blog")
 cli.add_command(ppt_cli, name="ppt")
 cli.add_command(video_cli, name="video")
+
+# SEO相关命令
+@cli.group(name="seo")
+def seo_cli():
+    """SEO+GEO优化相关工具"""
+    pass
+
+@seo_cli.command(name="hotspot")
+@click.option("--count", "-c", default=5, help="返回热点数量")
+@click.option("--days", "-d", default=7, help="最近几天的热点")
+def hotspot(count, days):
+    """抓取近期热门话题"""
+    crawler = HotspotCrawler()
+    hotspots = crawler.get_latest_hotspots(count=count, days=days)
+    click.echo(click.style(f"🔥 最近{days}天热门话题TOP{count}:", fg="red", bold=True))
+    for i, hs in enumerate(hotspots, 1):
+        click.echo(f"\n{i}. {hs['title']}")
+        click.echo(f"   热度: {hs['hot_value']:,} | 平台: {hs['platform']} | 发布时间: {hs['publish_time']}")
+        click.echo(f"   摘要: {hs['summary']}")
+
+@seo_cli.command(name="keyword")
+@click.option("--niche", "-n", default="AI营销", help="细分领域")
+@click.option("--count", "-c", default=5, help="返回关键词数量")
+def keyword(niche, count):
+    """挖掘高价值低竞争关键词"""
+    kr = KeywordResearch(niche=niche)
+    keywords = kr.get_high_value_keywords(count=count)
+    click.echo(click.style(f"🔑 {niche}领域高价值关键词TOP{count}:", fg="blue", bold=True))
+    for i, kw in enumerate(keywords, 1):
+        click.echo(f"\n{i}. {kw.keyword}")
+        click.echo(f"   搜索量: {kw.search_volume:,}/月 | 竞争难度: {kw.difficulty:.1f} | 意图: {kw.intent}")
+        click.echo(f"   相关关键词: {', '.join(kw.related_keywords)}")
+
+@seo_cli.command(name="audit")
+@click.argument("content_path", type=click.Path(exists=True))
+@click.option("--keyword", "-k", help="目标关键词")
+def audit(content_path, keyword):
+    """审核内容质量（CORE-EEAT标准）"""
+    with open(content_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    title = os.path.basename(content_path).replace(".md", "")
+    
+    auditor = ContentAuditor()
+    result = auditor.audit(content, title, keyword)
+    
+    click.echo(click.style(f"📋 内容质量审核结果:", fg="green", bold=True))
+    click.echo(f"总分: {result.overall_score}/100 | {'✅ 通过' if result.passed else '❌ 未通过'}")
+    click.echo(f"各维度得分: C(内容质量):{result.dimension_scores['C']} O(原创性):{result.dimension_scores['O']} R(相关性):{result.dimension_scores['R']} E(专业性):{result.dimension_scores['E']}")
+    
+    if result.veto_triggers:
+        click.echo(click.style("\n❌ 否决项（必须修改）:", fg="red"))
+        for v in result.veto_triggers:
+            click.echo(f"   - {v}")
+    
+    if result.optimization_suggestions:
+        click.echo(click.style("\n💡 优化建议:", fg="yellow"))
+        for s in result.optimization_suggestions:
+            click.echo(f"   - {s}")
+
+@seo_cli.command(name="geo")
+@click.argument("content_path", type=click.Path(exists=True))
+@click.option("--keyword", "-k", help="目标关键词")
+@click.option("--output", "-o", help="优化后内容输出路径")
+def geo(content_path, keyword, output):
+    """GEO优化（提升大模型引用率）"""
+    with open(content_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    
+    optimizer = GeoOptimizer()
+    optimized = optimizer.optimize(content, keyword)
+    suggestions = optimizer.get_optimization_suggestions(content)
+    
+    if output:
+        with open(output, "w", encoding="utf-8") as f:
+            f.write(optimized)
+        click.echo(click.style(f"✅ 优化后内容已保存到: {output}", fg="green"))
+    else:
+        click.echo(click.style("✅ 优化后内容:", fg="green"))
+        click.echo(optimized)
+    
+    if suggestions:
+        click.echo(click.style("\n💡 进一步优化建议:", fg="yellow"))
+        for s in suggestions:
+            click.echo(f"   - {s}")
 
 if __name__ == "__main__":
     cli()
