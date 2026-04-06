@@ -1,0 +1,23 @@
+{
+  "platform": "all",
+  "count": 10,
+  "days": 7,
+  "keyword": "AI",
+  "rss_feeds": [
+    "https://news.ycombinator.com/rss",
+    "https://www.reddit.com/r/technology/.rss",
+    "https://www.reuters.com/rssFeed/topNews"
+  ],
+  "platform_feeds": {
+    "xhs": [
+      "https://news.ycombinator.com/rss",
+      "https://www.reddit.com/r/ai/.rss"
+    ],
+    "weibo": ["https://news.ycombinator.com/rss"],
+    "zhihu": ["https://news.ycombinator.com/rss"],
+    "bilibili": ["https://news.ycombinator.com/rss"],
+    "reddit": ["https://www.reddit.com/r/technology/.rss"],
+    "hackernews": ["https://news.ycombinator.com/rss"]
+  },
+  "output_dir": "./output/trendradar"
+}

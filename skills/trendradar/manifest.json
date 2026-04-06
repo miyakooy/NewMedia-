@@ -1,0 +1,26 @@
+{
+  "name": "trendradar",
+  "version": "0.1.0",
+  "title": "TrendRadar",
+  "description": "本地热点抓取、关键词筛选、简报生成与 MCP 调用技能",
+  "entry": "skills/trendradar/SKILL.md",
+  "runtime": {
+    "type": "python",
+    "module": "src.trendradar.mcp",
+    "cli": "src.trendradar.cli"
+  },
+  "dependencies": [
+    "requests",
+    "feedparser",
+    "fastmcp",
+    "pydantic",
+    "PyYAML",
+    "tenacity"
+  ],
+  "capabilities": [
+    "get_hotspots",
+    "search_hotspots",
+    "build_brief",
+    "export_brief"
+  ]
+}
