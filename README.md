@@ -4,7 +4,7 @@
 
 ## ✨ 核心功能
 ### 内容生产
-- ✅ **小红书文案生成**：自动生成符合小红书风格的文案，支持自定义风格、字数、话题
+- ✅ **小红书主题生成**：优先使用 Gemini 3 Flash 生成文案，缺少 Gemini 配置时回退到 OpenAI GPT-4o；同时生成配图并保存到本地
 - ✅ **公众号/博客文章生成**：自动生成深度长文，支持自定义结构、排版、引用
 - ✅ **PPT生成**：输入主题自动生成完整PPT，支持多种模板
 - ✅ **视频生成**：输入文案自动生成短视频，支持字幕、背景音乐、风格选择
@@ -26,8 +26,8 @@ cp config.example.py config.py
 
 ### 基础内容生成
 ```bash
-# 生成小红书文案
-python cli.py xhs generate "AI工具推荐"
+# 生成小红书主题内容
+python cli.py xhs generate --topic "AI工具推荐"
 
 # 生成公众号文章
 python cli.py blog generate "2026年AI营销趋势"

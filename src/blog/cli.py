@@ -2,7 +2,7 @@ import click
 import os
 from datetime import datetime
 import config
-from src.utils import generate_image, archive_to_bitable, get_hotspots
+from src.utils import generate_image, archive_to_bitable
 
 @click.group(name="blog")
 def blog_cli():

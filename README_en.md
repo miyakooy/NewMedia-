@@ -17,11 +17,10 @@
 
 ## ✨ Core Features
 
-### 📕 Xiaohongshu (Little Red Book) Full Automatic Marketing Workflow
-- ✅ Hotspot auto-crawling: Real-time capture of hot topics from Xiaohongshu, Douyin, Weibo based on Craw4AI
-- ✅ AI copy generation: Fits Xiaohongshu style, with emojis, hashtags, interactive guides
-- ✅ Smart image generation: 1:1 square cute/ins style images, automatically matching the copy theme
-- ✅ Auto archiving: Automatically sync copy and images to Feishu Bitable, support scheduled batch production
+### 📕 Xiaohongshu (Little Red Book) Topic Generation Workflow
+- ✅ AI copy generation: Prefer Gemini 3 Flash first, and fall back to OpenAI GPT-4o when Gemini is not configured
+- ✅ Smart image generation: 1:1 square cute/ins style images, automatically matching the topic
+- ✅ Local output: Saves copy and image to local files for further use
 
 ### 📝 Official Account/Blog Full Automatic Creation Workflow
 - ✅ Hot topic selection: Automatic crawling and analysis of whole network hotspots, generate high-quality topics
@@ -62,9 +61,9 @@ Fill in `config.py`:
 
 ### 3. First Use
 
-#### Generate Xiaohongshu content
+#### Generate Xiaohongshu topic content
 ```bash
-tnm xhs generate --topic "AI tool recommendation" --count 5
+tnm xhs generate --topic "AI tool recommendation"
 ```
 
 #### Generate official account article

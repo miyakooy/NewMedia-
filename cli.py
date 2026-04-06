@@ -113,5 +113,34 @@ def geo(content_path, keyword, output):
         for s in suggestions:
             click.echo(f"   - {s}")
 
+# 飞书相关命令
+@cli.group(name="feishu")
+def feishu_cli():
+    """飞书多维表格相关工具"""
+    pass
+
+@feishu_cli.command(name="update-meta")
+@click.option("--name", "-n", default=None, help="新的多维表格名称（不超过100字符）")
+@click.option("--advanced/--no-advanced", default=None, help="开启/关闭高级权限")
+@click.option("--app-token", default=None, help="多维表格 app_token（不传则从配置中解析）")
+def update_meta(name, advanced, app_token):
+    """更新多维表格元数据（名称、高级权限）"""
+    if name is None and advanced is None:
+        click.echo(click.style("⚠️  请至少指定 --name 或 --advanced/--no-advanced", fg="yellow"))
+        return
+
+    from src.utils.feishu_archive import update_bitable_meta, FeishuArchiveError
+
+    try:
+        app_info = update_bitable_meta(
+            name=name,
+            is_advanced=advanced,
+            app_token=app_token,
+        )
+        click.echo(click.style(f"📋 返回信息: {json.dumps(app_info, ensure_ascii=False, indent=2)}", fg="cyan"))
+    except FeishuArchiveError as exc:
+        click.echo(click.style(f"❌ 更新失败: {exc}", fg="red"))
+
+
 if __name__ == "__main__":
     cli()
